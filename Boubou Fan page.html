@@ -58,20 +58,6 @@
       </div>
     </section>
 
-    <section id="formulaire" class="form-section">
-      <h2>Soumettre une photo de Boubou</h2>
-      <form id="photoForm">
-        <input type="text" id="photoURL" placeholder="Lien vers la photo" required />
-        <button type="submit">Envoyer</button>
-      </form>
-    </section>
-
-    <section id="pending-gallery" class="pending-gallery">
-      <h2>Photos en attente</h2>
-      <div class="pending-gallery-grid" id="pendingGallery"></div>
-    </section>
-
-
      <!-- QUIZZ -->
      <section id="quizz" class="quizz-section" style="padding: 2rem;">
       <h2 style="text-align:center; margin-bottom: 1rem;">🎀 BoubiQuizz 🎀</h2>
@@ -93,9 +79,28 @@
       </div>
     </section>
 
-    <script>
+    <section id="formulaire" class="form-section">
+      <h2>Soumettre une photo de Boubou</h2>
+      <form id="photoForm">
+        <input type="text" id="photoURL" placeholder="Lien vers la photo" required />
+        <button type="submit">Envoyer</button>
+      </form>
+    </section>
 
+    <section id="pending-gallery" class="pending-gallery">
+      <h2>Photos en attente</h2>
+      <div class="pending-gallery-grid" id="pendingGallery"></div>
+    </section>
+
+    <section id="fan-gallery" class="fan-gallery">
+      <h2>Galerie des fans</h2>
+      <div class="fan-gallery-grid" id="fanGallery"></div>
+    </section>
+
+    
+    <script>
     const form = document.getElementById("photoForm");
+    const gallery = document.getElementById("fanGallery");
     const pendingGallery = document.getElementById("pendingGallery");
 
     let photos = JSON.parse(localStorage.getItem("fanPhotos")) || [];
@@ -115,9 +120,58 @@
         img.src = photo.url;
         img.alt = `Fan ${index + 1}`;
         card.appendChild(img);
+
+        const likes = document.createElement("div");
+        likes.className = "likes";
+        likes.innerText = `${photo.likes || 0} like(s)`;
+        card.appendChild(likes);
+
+        const likeBtn = document.createElement("button");
+        likeBtn.innerText = "❤️ Liker";
+        likeBtn.onclick = () => {
+          photo.likes = (photo.likes || 0) + 1;
+          saveAll();
+          renderPhotos();
+        };
+        card.appendChild(likeBtn);
+
+        const commentSection = document.createElement("div");
+        commentSection.className = "comment-section";
+
+        const commentInput = document.createElement("input");
+        commentInput.type = "text";
+        commentInput.placeholder = "Laissez un commentaire...";
+        commentSection.appendChild(commentInput);
+
+        const addCommentBtn = document.createElement("button");
+        addCommentBtn.innerText = "Ajouter un commentaire";
+        addCommentBtn.onclick = () => {
+          const comment = commentInput.value.trim();
+          if (comment) {
+            photo.comments = photo.comments || [];
+            photo.comments.push(comment);
+            saveAll();
+            renderPhotos();
+          }
+        };
+        commentSection.appendChild(addCommentBtn);
+
+        const commentList = document.createElement("div");
+        commentList.className = "comments";
+        if (photo.comments && photo.comments.length > 0) {
+          photo.comments.forEach((comment) => {
+            const commentItem = document.createElement("div");
+            commentItem.className = "comment";
+            commentItem.innerText = comment;
+            commentList.appendChild(commentItem);
+          });
+        }
+
+        commentSection.appendChild(commentList);
+        card.appendChild(commentSection);
+        gallery.appendChild(card);
       });
     }
-
 
     function renderPending() {
       pendingGallery.innerHTML = "";
@@ -152,7 +206,7 @@
         pendingGallery.appendChild(card);
       });
     }
-    
+
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const url = document.getElementById("photoURL").value.trim();
@@ -164,7 +218,7 @@
       }
     });
 
-      function checkAnswer(button, correct) {
+    function checkAnswer(button, correct) {
       const parent = button.parentElement;
       const feedback = parent.querySelector(".feedback");
       if (correct === 'vrai') {
@@ -178,12 +232,6 @@
 
     renderPhotos();
     renderPending();
-
-    function saveAll() {
-      localStorage.setItem("fanPhotos", JSON.stringify(photos));
-      localStorage.setItem("pendingPhotos", JSON.stringify(pending));
-    }
-    
     </script>
 
 </body>
