@@ -24,9 +24,11 @@
     button { background-color: #b54878; color: white; padding: 0.8rem; border: none; border-radius: 8px; cursor: pointer; }
     .photo-card { background: #fff; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     canvas { border: 2px solid #b54878; display: block; margin: 1rem auto; background: #fff; width: 800px; height: 800px; }
-
-      /* Merch */
-      .cart-section button {
+    .snake-game button { display: block; margin: 0 auto 1rem; }
+    #score { text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
+  
+    /* Merch */
+    .cart-section button {
   background-color: #b54878;
   color: white;
   padding: 0.3rem 0.6rem;
@@ -358,11 +360,10 @@ input:focus, select:focus {
 .confirm-button:hover {
   background-color: #c77bae;
 }
-
   </style>
 </head>
 
-  <body>
+<body>
   <header class="navbar">
     <div class="logo">Boubou 💖</div>
     <nav>
@@ -389,12 +390,12 @@ input:focus, select:focus {
       <h2>Photos de Boubou</h2>
       <div class="image-grid">
         <img src="young-boubou.png" alt="Jeune Boubou" />
-        <img src="young boubettos.JPG" alt="Boubettos style" />
+        <img src="Young boubettos.JPG" alt="Boubettos style" />
       </div>
     </section>
 
-     <!-- QUIZZ -->
-     <section id="quizz" class="quizz-section" style="padding: 2rem;">
+    <!-- QUIZZ -->
+    <section id="quizz" class="quizz-section" style="padding: 2rem;">
       <h2 style="text-align:center; margin-bottom: 1rem;">🎀 BoubiQuizz 🎀</h2>
       <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
         <div class="quiz-card" style="flex: 1; min-width: 250px; padding: 1rem; border: 2px solid #b54878; border-radius: 12px;">
@@ -432,56 +433,75 @@ input:focus, select:focus {
       <div class="fan-gallery-grid" id="fanGallery"></div>
     </section>
 
-        <!--Merch-->
-        <section id="boubimerch" class="gallery">
-          <h2>🛍️ BoubiMerch</h2>
-          <p style="text-align:center; margin-bottom: 1rem;">Découvrez les produits dérivés de l'univers de Boubou !</p>
-          <div class="image-grid">
-            <div class="photo-card">
-              <img src="Boubou t-shirt.png" alt="Boubou T-shirt" />
-              <h3 style="text-align:center;">Boubou T-shirt (Taille unique)</h3>
-              <p style="text-align: center;"font-size: 1.8em; color: #333; margin-bottom: 1em;">20 €</p>
-              <button onclick="addToCart('Boubou T-shirt', 'Taille unique')"style="display: block; margin: 0 auto; padding: 0.8rem 1.5rem;">🛒 Ajouter au panier</button>
+    <!--Merch-->
+    <section id="boubimerch" class="gallery">
+        <h2>🛍️ BoubiMerch</h2>
+        <p style="text-align:center; margin-bottom: 1rem;">Découvrez les produits dérivés de l'univers de Boubou !</p>
+        <div class="image-grid">
+          <div class="photo-card">
+            <img src="Boubou t-shirt.png" alt="Boubou T-shirt" />
+            <h3 style="text-align:center;">Boubou T-shirt (Taille unique)</h3>
+            <p style="text-align: center;"font-size: 1.8em; color: #333; margin-bottom: 1em;">20 €</p>
+            <button onclick="addToCart('Boubou T-shirt', 'Taille unique')"style="display: block; margin: 0 auto; padding: 0.8rem 1.5rem;">🛒 Ajouter au panier</button>
+          </div>
+          <div class="photo-card">
+            <img src="Boubettos pair of shoes.png" alt="Boubettos pair of shoes" />
+            <h3 style="text-align:center;">Boubettos Pair of shoes</h3>
+            <p style="text-align: center; font-size: 1em; color: #333; margin-bottom: 1em;">35€</p>
+            
+            <div style="display: flex; align-items: center; gap: 1rem; justify-content: center;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label for="shoeSize">Taille :</label>
+                    <select id="shoeSize" style="padding: 0.5rem; border-radius: 6px; border: 1px solid #b54878;">
+                        <!-- Options de taille -->
+                        <script>
+                            for (let i = 35; i <= 51; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+                <button onclick="addShoesToCart()" 
+                        style="padding: 0.8rem 1.5rem;
+                               background-color: #b54878;
+                               color: white;
+                               border: none;
+                               border-radius: 8px;
+                               cursor: pointer;">
+                    🛒 Ajouter au panier
+                </button>
             </div>
-            <div class="photo-card">
-              <img src="Boubettos pair of shoes.png" alt="Boubettos pair of shoes" />
-              <h3 style="text-align:center;">Boubettos Pair of shoes</h3>
-              <p style="text-align: center; font-size: 1em; color: #333; margin-bottom: 1em;">35€</p>
-              
-              <div style="display: flex; align-items: center; gap: 1rem; justify-content: center;">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                      <label for="shoeSize">Taille :</label>
-                      <select id="shoeSize" style="padding: 0.5rem; border-radius: 6px; border: 1px solid #b54878;">
-                          <!-- Options de taille -->
-                          <script>
-                              for (let i = 35; i <= 51; i++) {
-                                  document.write(`<option value="${i}">${i}</option>`);
-                              }
-                          </script>
-                      </select>
-                  </div>
-                  <button onclick="addShoesToCart()" 
-                          style="padding: 0.8rem 1.5rem;
-                                 background-color: #b54878;
-                                 color: white;
-                                 border: none;
-                                 border-radius: 8px;
-                                 cursor: pointer;">
-                      🛒 Ajouter au panier
-                  </button>
-              </div>
-          </div>
+        </div>
+      
+        <div class="cart-section">
+          <h3>🧺 Panier</h3>
+          <ul id="cartList">
+          </ul>
+          <!-- Bouton Commander -->
+          <button id="orderButton">🛍️ Commander</button>
+        </div>
+
         
-          <div class="cart-section">
-            <h3>🧺 Panier</h3>
-            <ul id="cartList">
-            </ul>
-            <!-- Bouton Commander -->
-            <button id="orderButton">🛍️ Commander</button>
-          </div>
+      </section>
+  
+    <section id="snake" class="snake-game">
+        <h2>🎮 Jouer au BoubiSnake</h2>
+        <p id="score">Score : 0</p>
+        <button onclick="startGame()">▶️ Lancer le jeu</button>
+        <canvas id="snakeCanvas" width="800" height="800"></canvas>
+    </section>
 
-    <script>
+    <div style="text-align: center; margin: 3rem 0;">
+        <a href="#top" class="back-home">⬅️ Retour en haut</a>
+    </div>
+ </main>  
 
+
+  <footer>
+    <p>&copy; 2025 Boubou Fan Page — <a href="https://www.instagram.com/lirbenjamin/" target="_blank">Instagram</a></p>
+  </footer>
+
+  <script>
     const form = document.getElementById("photoForm");
     const gallery = document.getElementById("fanGallery");
     const pendingGallery = document.getElementById("pendingGallery");
@@ -529,7 +549,6 @@ input:focus, select:focus {
         const addCommentBtn = document.createElement("button");
         addCommentBtn.innerText = "Ajouter un commentaire";
         addCommentBtn.onclick = () => {
-
           const comment = commentInput.value.trim();
           if (comment) {
             photo.comments = photo.comments || [];
@@ -601,7 +620,7 @@ input:focus, select:focus {
         form.reset();
       }
     });
-    
+
     function checkAnswer(button, correct) {
       const parent = button.parentElement;
       const feedback = parent.querySelector(".feedback");
@@ -617,8 +636,91 @@ input:focus, select:focus {
     renderPhotos();
     renderPending();
 
+    // BoubiSnake Game
+    const canvas = document.getElementById("snakeCanvas");
+    const ctx = canvas.getContext("2d");
+    const box = 40;
+    let snake, food, direction, interval, score;
+
+    const snakeImg = new Image();
+    snakeImg.src = "boubette.png";
+
+    const foodImg = new Image();
+    foodImg.src = "boubou.jpeg";
+
+    const eatSound = new Audio("eat.mp3");
+    const deathSound = new Audio("gameover.mp3");
+
+    function startGame() {
+      snake = [{ x: 5 * box, y: 5 * box }];
+      food = randomFood();
+      direction = "RIGHT";
+      score = 0;
+      document.getElementById("score").innerText = "Score : 0";
+      clearInterval(interval);
+      interval = setInterval(draw, 150);
+    }
+
+    function randomFood() {
+      return {
+        x: Math.floor(Math.random() * (canvas.width / box)) * box,
+        y: Math.floor(Math.random() * (canvas.height / box)) * box
+      };
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) e.preventDefault();
+      if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+      if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+      if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+      if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Snake
+      for (let i = 0; i < snake.length; i++) {
+        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
+      }
+
+      // Food
+      ctx.drawImage(foodImg, food.x, food.y, box, box);
+
+      let headX = snake[0].x;
+      let headY = snake[0].y;
+      if (direction === "LEFT") headX -= box;
+      if (direction === "UP") headY -= box;
+      if (direction === "RIGHT") headX += box;
+      if (direction === "DOWN") headY += box;
+
+      // Collision
+      if (
+        headX < 0 || headY < 0 ||
+        headX >= canvas.width || headY >= canvas.height ||
+        snake.slice(1).some(s => s.x === headX && s.y === headY)
+      ) {
+        deathSound.play();
+        clearInterval(interval);
+        alert("💀 Game Over ! Score : " + score);
+        return;
+      }
+
+      if (headX === food.x && headY === food.y) {
+        eatSound.play();
+        food = randomFood();
+        score++;
+        document.getElementById("score").innerText = "Score : " + score;
+      } else {
+        snake.pop();
+      }
+
+      snake.unshift({ x: headX, y: headY });
+    }
+
+
     const cart = [];
-  
+
 function addToCart(productName, size) {
   const existing = cart.find(item => item.name === productName && item.size === size);
   if (existing) {
@@ -697,7 +799,7 @@ document.getElementById("orderButton").addEventListener("click", function () {
     <div class="order-summary-container" style="padding: 2rem; min-height:100vh;">
       <!-- Bouton Retour à l'accueil -->
       <button 
-        onclick="window.location.href='Boubou Fan page.html'" 
+        onclick="window.location.href='Test finale.html'" 
         style="
           display: block;
           margin-bottom: 2rem;
@@ -782,7 +884,6 @@ document.getElementById("orderButton").addEventListener("click", function () {
     renderCart();
   });
 });
-    </script>
-
+  </script>
 </body>
 </html>
