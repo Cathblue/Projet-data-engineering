@@ -479,7 +479,17 @@ input:focus, select:focus {
             <!-- Bouton Commander -->
             <button id="orderButton">🛍️ Commander</button>
           </div>
-
+    </section>
+    
+          <section id="snake" class="snake-game">
+            <h2>🎮 Jouer au BoubiSnake</h2>
+            <p id="score">Score : 0</p>
+            <button onclick="startGame()">▶️ Lancer le jeu</button>
+            <canvas id="snakeCanvas" width="800" height="800"></canvas>
+        </section>
+     </main>  
+    
+    
     <script>
 
     const form = document.getElementById("photoForm");
@@ -616,6 +626,88 @@ input:focus, select:focus {
 
     renderPhotos();
     renderPending();
+
+        // BoubiSnake Game
+        const canvas = document.getElementById("snakeCanvas");
+    const ctx = canvas.getContext("2d");
+    const box = 40;
+    let snake, food, direction, interval, score;
+
+    const snakeImg = new Image();
+    snakeImg.src = "boubette.png";
+
+    const foodImg = new Image();
+    foodImg.src = "boubou.jpeg";
+
+    const eatSound = new Audio("eat.mp3");
+    const deathSound = new Audio("gameover.mp3");
+
+    function startGame() {
+      snake = [{ x: 5 * box, y: 5 * box }];
+      food = randomFood();
+      direction = "RIGHT";
+      score = 0;
+      document.getElementById("score").innerText = "Score : 0";
+      clearInterval(interval);
+      interval = setInterval(draw, 150);
+    }
+
+    function randomFood() {
+      return {
+        x: Math.floor(Math.random() * (canvas.width / box)) * box,
+        y: Math.floor(Math.random() * (canvas.height / box)) * box
+      };
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) e.preventDefault();
+      if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+      if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+      if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+      if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Snake
+      for (let i = 0; i < snake.length; i++) {
+        ctx.drawImage(snakeImg, snake[i].x, snake[i].y, box, box);
+      }
+
+      // Food
+      ctx.drawImage(foodImg, food.x, food.y, box, box);
+
+      let headX = snake[0].x;
+      let headY = snake[0].y;
+      if (direction === "LEFT") headX -= box;
+      if (direction === "UP") headY -= box;
+      if (direction === "RIGHT") headX += box;
+      if (direction === "DOWN") headY += box;
+
+      // Collision
+      if (
+        headX < 0 || headY < 0 ||
+        headX >= canvas.width || headY >= canvas.height ||
+        snake.slice(1).some(s => s.x === headX && s.y === headY)
+      ) {
+        deathSound.play();
+        clearInterval(interval);
+        alert("💀 Game Over ! Score : " + score);
+        return;
+      }
+
+      if (headX === food.x && headY === food.y) {
+        eatSound.play();
+        food = randomFood();
+        score++;
+        document.getElementById("score").innerText = "Score : " + score;
+      } else {
+        snake.pop();
+      }
+
+      snake.unshift({ x: headX, y: headY });
+    }
 
     const cart = [];
   
