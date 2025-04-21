@@ -13,6 +13,17 @@
     header nav ul { display: flex; gap: 1.5rem; list-style: none; }
     .hero { text-align: center; padding: 4rem 2rem; background: #ffe6f0; }
     .hero h1 { font-size: 3rem; }
+    .gallery, .fan-gallery, .snake-game { padding: 2rem; }
+    .image-grid, .fan-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .image-grid img, .fan-gallery-grid img { width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .lists { padding: 2rem; }
+    .lists ul, .lists ol { margin-left: 2rem; margin-bottom: 1rem; }
+    .form-section { padding: 2rem; background-color: #fff3f8; }
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    input[type="text"] { padding: 0.6rem; border: 1px solid #ccc; border-radius: 8px; }
+    button { background-color: #b54878; color: white; padding: 0.8rem; border: none; border-radius: 8px; cursor: pointer; }
+    .photo-card { background: #fff; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    canvas { border: 2px solid #b54878; display: block; margin: 1rem auto; background: #fff; width: 800px; height: 800px; }
   </style>
 </head>
 
@@ -47,6 +58,19 @@
       </div>
     </section>
 
+    <section id="formulaire" class="form-section">
+      <h2>Soumettre une photo de Boubou</h2>
+      <form id="photoForm">
+        <input type="text" id="photoURL" placeholder="Lien vers la photo" required />
+        <button type="submit">Envoyer</button>
+      </form>
+    </section>
+
+    <section id="pending-gallery" class="pending-gallery">
+      <h2>Photos en attente</h2>
+      <div class="pending-gallery-grid" id="pendingGallery"></div>
+    </section>
+
 
      <!-- QUIZZ -->
      <section id="quizz" class="quizz-section" style="padding: 2rem;">
@@ -70,6 +94,76 @@
     </section>
 
     <script>
+
+    const form = document.getElementById("photoForm");
+    const pendingGallery = document.getElementById("pendingGallery");
+
+    let photos = JSON.parse(localStorage.getItem("fanPhotos")) || [];
+    let pending = JSON.parse(localStorage.getItem("pendingPhotos")) || [];
+
+    function saveAll() {
+      localStorage.setItem("fanPhotos", JSON.stringify(photos));
+      localStorage.setItem("pendingPhotos", JSON.stringify(pending));
+    }
+
+    function renderPhotos() {
+      gallery.innerHTML = "";
+      photos.forEach((photo, index) => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+        const img = document.createElement("img");
+        img.src = photo.url;
+        img.alt = `Fan ${index + 1}`;
+        card.appendChild(img);
+      });
+    }
+
+
+    function renderPending() {
+      pendingGallery.innerHTML = "";
+      pending.forEach((photo, index) => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+        const img = document.createElement("img");
+        img.src = photo.url;
+        img.alt = `En attente ${index + 1}`;
+        card.appendChild(img);
+
+        const acceptBtn = document.createElement("button");
+        acceptBtn.innerText = "✅ Valider";
+        acceptBtn.onclick = () => {
+          photos.push({ url: photo.url, likes: 0, comments: [] });
+          pending.splice(index, 1);
+          saveAll();
+          renderPhotos();
+          renderPending();
+        };
+
+        const rejectBtn = document.createElement("button");
+        rejectBtn.innerText = "❌ Refuser";
+        rejectBtn.onclick = () => {
+          pending.splice(index, 1);
+          saveAll();
+          renderPending();
+        };
+
+        card.appendChild(acceptBtn);
+        card.appendChild(rejectBtn);
+        pendingGallery.appendChild(card);
+      });
+    }
+    
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const url = document.getElementById("photoURL").value.trim();
+      if (url) {
+        pending.push({ url });
+        saveAll();
+        renderPending();
+        form.reset();
+      }
+    });
+
       function checkAnswer(button, correct) {
       const parent = button.parentElement;
       const feedback = parent.querySelector(".feedback");
@@ -84,6 +178,11 @@
 
     renderPhotos();
     renderPending();
+
+    function saveAll() {
+      localStorage.setItem("fanPhotos", JSON.stringify(photos));
+      localStorage.setItem("pendingPhotos", JSON.stringify(pending));
+    }
     
     </script>
 
