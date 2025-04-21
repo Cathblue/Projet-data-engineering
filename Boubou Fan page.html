@@ -46,5 +46,44 @@
       </div>
     </section>
     
-</head>
+     <!-- QUIZZ -->
+     <section id="quizz" class="quizz-section" style="padding: 2rem;">
+      <h2 style="text-align:center; margin-bottom: 1rem;">🎀 BoubiQuizz 🎀</h2>
+      <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+        <div class="quiz-card" style="flex: 1; min-width: 250px; padding: 1rem; border: 2px solid #b54878; border-radius: 12px;">
+          <h3 style="color:#b54878; margin-bottom: 1rem;">💖 Qu'est-ce que Boubou aime le plus ?</h3>
+          <button onclick="checkAnswer(this, 'faux')" style="margin-bottom: 0.5rem;">🎮 Les jeux vidéos</button><br>
+          <button onclick="checkAnswer(this, 'faux')" style="margin-bottom: 0.5rem;">🥽 La VR</button><br>
+          <button onclick="checkAnswer(this, 'vrai')">📺 Les animes</button>
+          <p class="feedback" style="margin-top: 0.8rem; font-weight: bold;"></p>
+        </div>
+        <div class="quiz-card" style="flex: 1; min-width: 250px; padding: 1rem; border: 2px solid #b54878; border-radius: 12px;">
+          <h3 style="color:#b54878; margin-bottom: 1rem;">🫢 Qu'est-ce que Boubou déteste le plus ?</h3>
+          <button onclick="checkAnswer(this, 'faux')" style="margin-bottom: 0.5rem;">🧄 L'ail</button><br>
+          <button onclick="checkAnswer(this, 'faux')" style="margin-bottom: 0.5rem;">🕒 Procrastiner</button><br>
+          <button onclick="checkAnswer(this, 'vrai')">🧹 Le désordre</button>
+          <p class="feedback" style="margin-top: 0.8rem; font-weight: bold;"></p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function checkAnswer(button, correct) {
+      const parent = button.parentElement;
+      const feedback = parent.querySelector(".feedback");
+      if (correct === 'vrai') {
+        feedback.innerText = "✨ Bonne réponse ! Boubou est fier de toi 💖";
+        feedback.style.color = "#b54878";
+      } else {
+        feedback.innerText = "😢 Oups, ce n'était pas ça ! Essaie encore !";
+        feedback.style.color = "#999";
+      }
+    }
+
+    renderPhotos();
+    renderPending();
+    
+    </script>
+
+</body>
 </html>
